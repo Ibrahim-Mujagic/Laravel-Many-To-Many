@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Category;
 use App\Models\Project;
+use App\Models\Techs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,8 @@ class ProjectController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.projects.create',compact('categories'));
+        $techs = Techs::all();
+        return view('admin.projects.create',compact('categories','techs'));
 
     }
 
@@ -44,6 +46,7 @@ class ProjectController extends Controller
     {
        $data = $request->all();
 
+
         if(array_key_exists('cover_image',$data)){
             $data['original_image_name'] = $request->file('cover_image')->getClientOriginalName();
             $data['cover_image'] = Storage::put('uploads',$data['cover_image']);
@@ -53,6 +56,10 @@ class ProjectController extends Controller
         $data['slug'] = Project::generateSlug($data['name']);
         $newProject->fill($data);
         $newProject->save();
+
+        if (array_key_exists('techs',$data)) {
+            $newProject->techs()->attach($data['techs']);
+        }
 
         return redirect()->route('admin.projects.show',$newProject);
     }
@@ -72,7 +79,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $categories = Category::all();
-        return view('admin.projects.edit',compact('project','categories'));
+        $techs = Techs::all();
+        return view('admin.projects.edit',compact('project','categories','techs'));
     }
 
     /**
@@ -96,9 +104,10 @@ class ProjectController extends Controller
         }
 
         $project->update($data);
+        array_key_exists('techs',$data) ?  $project->techs()->sync($data['techs']) : $project->techs()->detach();
+
         
         return redirect()->route('admin.projects.show',$project);
-
     }
 
     /**

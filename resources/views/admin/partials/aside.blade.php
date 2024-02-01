@@ -24,5 +24,11 @@
         <span class="d-none d-lg-inline">Categories</span>
       </a>
     </li>
+    <li title="Technologies">
+      <a class="ib-link" href="{{route('admin.techs.index')}}">
+        <i class="fa-solid fa-bookmark"></i>
+        <span class="d-none d-lg-inline">Technologies</span>
+      </a>
+    </li>
   </ul>
 </aside>

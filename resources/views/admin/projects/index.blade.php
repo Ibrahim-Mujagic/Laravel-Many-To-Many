@@ -17,6 +17,12 @@
       <div class="card-body">
         <h5 class="card-title">{{$project->name}}</h5>
         <span class="badge text-bg-info">{{$project->category?->name}}</span>
+        </br>
+        @forelse ($project->techs as $tech)
+        <span class="badge text-bg-warning">{{$tech->name}}</span>
+        @empty
+        ..no..data..
+        @endforelse
         <p class="card-text">{{$project->summary}}</p>
         <a class="btn btn-outline-primary" href="{{route('admin.projects.show',$project)}}"><i
             class="fa-solid fa-eye"></i></a>

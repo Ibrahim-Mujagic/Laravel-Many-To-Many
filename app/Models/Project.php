@@ -11,6 +11,9 @@ class Project extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+    public function techs(){
+        return $this->belongsToMany(Techs::class);
+    }
 
     protected $fillable = ['name','client_name','cover_image','summary','slug','original_image_name','category_id'];
 
